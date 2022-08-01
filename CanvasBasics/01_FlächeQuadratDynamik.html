@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+  <head>
+      <title>Exercise 1</title>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <link rel="stylesheet" type="text/css" href="core/lib/semantic-ui/semantic.min.css">
+
+      <style> 
+        .aspect-container {         /* Container selbst  */
+          position: relative;
+          padding: 0 0 50% 0;
+          height: 0;
+          overflow: hidden;
+        }
+        #myCanvas1 {                /* Dynamische Anpassung des Canvas im Container drin */
+          width: 100%; 
+          height: 100%; 
+          position:absolute;
+          top:0;
+          left:0;
+        }
+      </style>
+
+      <script src="core/lib/jquery-3.2.1.js"></script>
+      <script src="core/lib/semantic-ui/semantic.min.js"></script>
+
+      <script>
+        // Ziel: Viereck zeichnen, Hintergrund zeichnen und dynamische Anpassung
+        let refCanvas = undefined;
+        let ctx = undefined;
+
+        // A) Diese Funktion initialisiert den Canvas
+        function init() { 
+          refCanvas = document.getElementById("myCanvas1");
+          if(refCanvas.getContext) {                          
+            ctx = refCanvas.getContext ('2d', {alpha: true}); // 2D Transparenter Hintergrund
+            resizeCanvas();                                   // resizeCanvas() auf Zeile 44 aufrufen, um DYNAMISCHE GRÖSSENANPASSUNG zu garantieren
+            window.addEventListener("resize", resizeCanvas);  // Jedes Mal wenn das Browserfenster verändert wird, so soll alles angepasst werden
+          }
+          
+        }
+        // B) Diese Funktion garantiert eine dynamische Grössenanpassung in Width und Height
+        function resizeCanvas() {
+          refCanvas.width = refCanvas.clientWidth;
+          refCanvas.height = refCanvas.clientHeight;
+          repaint(); // repaint() aus Zeile 51 aufrufen ("callen")
+          
+        }
+        // C) Diese Funktion "malen" wir den Canvas (black) und das Quadrat (red)
+        function repaint() {  // Immer Quadrat, Start Links oben (X/Y). Start 0/0, dynmamische Länge in Width und Height (Sind ja die 100px)
+          ctx.clearRect(0,0,refCanvas.width, refCanvas.height);     // Den Canvas löschen wir hier und zeigen ihn anschliessend mit einer Füllung (Eigentlich nicht nötig, wir können direkt loslegen)
+          ctx.fillStyle = "#000000";                                // Dem 100x100 Canvas geben wir den schwarzen Hintergrund
+          ctx.fillRect(0,0, refCanvas.width, refCanvas.height)      // 100px x 100px Canvas wäre das. Im body definiert
+          ctx.fillStyle = "#ff0000";            // Wir setzen die Farbe Rot DARÜBER, Reihenfolge entscheidend. Ansonsten wäre der Default Schwarz
+          ctx.fillRect(30,30,30,30);            // 30px von links (x), 30px von oben (Y), 60px länge vom Element ab links, 20px höhe vom Element ab oben
+        }
+        
+        $(function() { // Browser lädt damit alle funktionen. Quasi KURZFORM des $(document).ready()
+            init();    // Hier rufen wir die Funktion init() auf bei Zeile 33
+        });
+      </script>
+  </head>
+  <body>
+    <div class="ui raised padded container segment">
+      <div class="ui segments">
+        <div class="ui segment">
+          <h3>Canvas - Fläche Quadrat Dynamik</h3>
+        </div>
+        <div class="ui segment">
+          <!-- Canvas Element einfügen -->
+          <div class="aspect-container"> <!-- Schwarzer Container drum herum -->
+            <canvas id="myCanvas1" width="100" height="100"></canvas>  <!-- CanvasBASISgrösse einstellen, -->
+          </div>
+          
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,39 @@
+p.stoop@fiberjungle.com EMAIL
+
+CANVAS:
+- Quasi eine Leinwand, auf der man zeichnen / Objekte und Flächen darstellen kann.
+
+CANVAS WEBGL:
+- Anwendungsbeispiele Interaktiv direkt im Browser. z.B. das Bild von der Camera Screenshotten und direkt beschneiden auf BROWSEREBENE, (JS ohne Serverbezug)
+- Google Maps sind Canvas Elemente, die Kartenmaterial jedes Mal neu laden, bei Zoom und verschieben. (Interaktivität)
+- Webgames, 3D Visualisierungen (Canvas Elemente auf einer 3D Textur)
+
+HTML5 Canvas Tag:
+- Canvas ist Pixelbasiert im Unterschied zu den anderen HTML5 Elementen, aus Width und Height. Über jedes einzelne Pixel haben wir die Kontrolle
+- Darum können sich Canvas Elemente auch verzerren
+- Haben Context: "2D" (X- / Y- Achse basiert, "WEBGL" (3Dimensionaler Punkt) etc.
+- Attribute: Alpha True (Transparenter Hintergrund) oder False
+- Fill (Fläche füllen), Stroke (outlines, Umrandung): Bilder, Texte, Pfade, Rechtecken zeichnenh aber auch löschen
+
+Animation Loops:
+- setTimeout oder setInterval fürher für Animationen, heute eher um einen Nutzer in einer bestimmten Zeitspanne auf etwas hinzuweisen (z.B innert 30 Sekunden Inaktivität Nutzer ausloggen)
+
+Pfade im Canvas (Siehe Cheatsheet):
+1) beginPath() Neuer Pfad anfangen, auswählen
+2) moveTo() = Erster Klick, um Pfadpunkt zu setzen
+3) lineTo() = Darauffolgende Klicks, Pfadpunkte
+4) closePath() = Pfad schliessen, auch wenn der letzte Punkt nicht beim Anfangspunkt (X/Y gleich) gesetzt wurde.
+
+Line Styles im Canvas (Siehe Cheatsheet):
+
+Anti-Aliasing:
+- Berechnete saubere Übergänge, gerade Linien. Überall muss halbtransparenz berechnet werden, um auf Pixelbasis scharfe Übergänge zu erreichen.
+
+Canvas Image (Draw Image, siehe Cheatsheet):
+- Rendering des Bildes startet IMMER auf dem 0/0 Punkt oben Links
+- ctx.drawImage(img,sx,sy,swidth,sheight,x,y,width,height); mit 9 Parametern, wenn man ein Bild verkleinern möchte.
+
+Requestanimationframe:
+- Wird nur ausgeführt, wenn benötigt.
+- Synchrorate mit Refresh-Rate des Browsers
+- Funktion in der Regel 60x pro Sekunde, falls flüssig. Wenn der Browser nicht nachkommt, beginnt das "Stocken".
