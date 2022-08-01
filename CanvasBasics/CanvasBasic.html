@@ -55,7 +55,7 @@
           ctx.fillStyle = "#ff0000";            // Wir setzen die Farbe Rot DARÜBER, Reihenfolge entscheidend. Ansonsten wäre der Default Schwarz
           ctx.fillRect(30,30,30,30);            // 30px von links (x), 30px von oben (Y), 60px länge vom Element ab links, 20px höhe vom Element ab oben
         }
-        
+        // C) Diese Funktion ist dazu da, init() aufzurufen
         $(function() { // Browser lädt damit alle funktionen. Quasi KURZFORM des $(document).ready()
             init();    // Hier rufen wir die Funktion init() auf bei Zeile 33
         });
@@ -65,14 +65,14 @@
     <div class="ui raised padded container segment">
       <div class="ui segments">
         <div class="ui segment">
-          <h3>Canvas - Fläche Quadrat Dynamik</h3>
+          <h3>Canvas - Fläche Quadrat Basic</h3>
         </div>
         <div class="ui segment">
-          <!-- Canvas Element einfügen -->
+          <!-- (START) Canvas Element einfügen -->
           <div class="aspect-container"> <!-- Schwarzer Container drum herum -->
             <canvas id="myCanvas1" width="100" height="100"></canvas>  <!-- CanvasBASISgrösse einstellen, -->
           </div>
-          
+          <!-- (ENDE) Canvas Element einfügen -->
         </div>
       </div>
     </div>
