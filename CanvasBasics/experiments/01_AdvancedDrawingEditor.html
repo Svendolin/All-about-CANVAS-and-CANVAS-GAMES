@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+
+<html>
+  <head>
+      <title>Drawing Editor Advanced // Paths in Canvas</title>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <link rel="stylesheet" type="text/css" href="core/lib/semantic-ui/semantic.min.css">
+
+      <style> 
+        .aspect-container {
+          position: relative;
+          padding: 0 0 50% 0;
+          height: 0;
+          overflow: hidden;
+        }
+        #myCanvas {
+          width: 100%; 
+          height: 100%; 
+          position:absolute;
+          top:0;
+          left:0;
+        }
+        #link {
+          display: none;
+        }
+      </style>
+
+      <script src="core/lib/jquery-3.2.1.js"></script>
+      <script src="core/lib/semantic-ui/semantic.min.js"></script>
+
+      <script>
+        let refCanvas = undefined;
+        let ctx = null;
+        
+        const Commands = {
+          clearall: "clearall",
+          draw: "draw",
+          newpath: "newpath"
+        }
+        
+        function init() {
+          refCanvas = document.getElementById("myCanvas");
+          if (refCanvas.getContext) {
+            ctx = refCanvas.getContext('2d', {alpha: true});
+            resizeCanvas();
+          }
+          
+          // --- Verschiedene Events --- //
+          window.addEventListener("resize", function() {
+            resizeCanvas();
+          });
+          
+          $("#myCanvas").on("mousedown", function (evt) {
+            let cPos = getPositionFromEvent(evt, refCanvas);
+            console.log("x:" + cPos.x + ", y:" + cPos.y);
+            paint(Commands.draw, cPos);
+          });
+          
+          $("#b-clearall").on("click", function(evt) {
+            paint(Commands.clearall, null);
+          });
+          
+          //click-handler fo b-newpath
+          
+          
+          
+          $("#b-screenshot").on("click", function(evt) {
+            if (refCanvas.msToBlob) { //for IE
+              let blob = refCanvas.msToBlob();
+              window.navigator.msSaveBlob(blob, 'canvas.png');
+            } else {
+              //other browsers
+              let link = document.getElementById('link');
+              link.setAttribute('download', 'canvas.png');
+              link.setAttribute('href', refCanvas.toDataURL("image/png").replace("image/png", "image/octet-stream"));
+              link.click();
+            }
+            
+          });
+          
+        };
+
+        function getPositionFromEvent(event, refCanvas) {
+          let result = { x: 0, y:0};
+
+          if (event.x != undefined && event.y != undefined) {
+            result.x = event.x;
+            result.y = event.y;
+          }
+          else { 
+            result.x = event.clientX;
+            result.y = event.clientY;
+          }
+          
+          let elemInfos = refCanvas.getBoundingClientRect();
+
+          result.x -= parseInt(elemInfos.left);
+          result.y -= parseInt(elemInfos.top);
+
+          return result;
+        }
+
+        function resizeCanvas() {
+          refCanvas.width = refCanvas.clientWidth;
+          refCanvas.height = refCanvas.clientHeight;
+          paint(Commands.clearall, null);
+        }
+
+        
+        function paint(cmd, posData) {
+          if (ctx != null) {
+            if ((cmd == Commands.draw) && (posData != null)) {
+              ctx.globalCompositeOperation = $("#i-compositeoperation").val(); // Reihenfolge. Canvas zeichnen wie auf Glas, gibt Ebenen Darüber und darunter
+              ctx.globalAlpha = parseFloat($("#i-alphavalue").val());
+              
+              var gradient = ctx.createLinearGradient(0, 0, refCanvas.width, refCanvas.height); // Farbverläufe zeichnen
+              gradient.addColorStop("0", "green");
+              gradient.addColorStop("0.5", "#" + $("#i-colorhex").val());
+              gradient.addColorStop("1.0", "blue");
+              
+              ctx.fillStyle = ctx.strokeStyle = gradient;
+              ctx.lineWidth = $("#i-strokewidth").val();
+              
+              //lineCap & lineJoin
+              
+              
+              // --- Linie an bestimmten Ort zeichnen --- //
+              ctx.lineTo(posData.x, posData.y); // Pfad aufbauen
+              ctx.stroke(); // Pfad zeichen, dann kann ausprobiert werden:
+              
+            }
+            else if (cmd == Commands.newpath) {
+              //close actual path and begin new path
+              
+            }
+            else {
+              ctx.clearRect(0, 0, refCanvas.width, refCanvas.height);
+              
+              // --- Neuen Pfad beginnen --- //
+              ctx.beginPath(); // Dadurch beginnt ein neuer Pfad. SOMIT funktioniert clearRect, wenn wir den Button zum Löschen drücken.
+                                // ...ansonsten wird nach dem Clear der Pfad wieder angezeigt. ERST bei einem BEGINPATH() kann der alte PFad abgeschlossen werden
+            }
+          }
+        }
+        
+        $(function() {
+            init();
+        });
+      </script>
+  </head>
+  <body>
+    <div class="ui raised padded container segment">
+      <div class="ui segments">
+        <div class="ui segment">
+          <h3>Canvas - Exercise 4 (Lines)</h3>
+        </div>
+        <div class="ui segment">
+          <button id="b-clearall" class="ui button">Clear All</button>
+          <button id="b-newpath" class="ui button">new Path</button>
+          <select class="ui dropdown" id="i-drawstyle">
+            <option value="fill">fill</option>
+            <option value="stroke" selected="selected">stroke</option>
+          </select>
+          <select class="ui dropdown" id="i-strokewidth">
+            <option value="1">1px (stroke)</option>
+            <option value="2">2px (stroke)</option>
+            <option value="4" selected="selected">4px (stroke)</option>
+            <option value="6">6px (stroke)</option>
+            <option value="8">8px (stroke)</option>
+            <option value="10">10px (stroke)</option>
+            <option value="15">15px (stroke)</option>
+            <option value="20">20px (stroke)</option>
+            <option value="30">30px (stroke)</option>
+          </select>
+          lineCap:
+          <select class="ui dropdown" id="i-linecap">
+            <option value="butt">butt</option>
+            <option value="round" selected="selected">round</option>
+            <option value="square">square</option>
+          </select>
+          lineJoin:
+          <select class="ui dropdown" id="i-linejoin">
+            <option value="round" selected="selected">round</option>
+            <option value="bevel">bevel</option>
+            <option value="miter">miter</option>
+          </select>
+          <div class="ui labeled input">
+            <div class="ui label">
+              Color-Hex
+            </div>
+            <input id="i-colorhex" type="text" value="ff0000">
+          </div>
+          <select class="ui dropdown" id="i-alphavalue">
+            <option value="0.2">Alpha (0.2)</option>
+            <option value="0.4">Alpha (0.4)</option>
+            <option value="0.6" selected="selected">Alpha (0.6)</option>
+            <option value="0.8">Alpha (0.8)</option>
+            <option value="1">Alpha (1.0)</option>
+          </select>
+          <select class="ui dropdown" id="i-compositeoperation">
+            <option value="source-over">source-over</option>
+            <option value="source-in">source-in</option>
+            <option value="source-out">source-out</option>
+            <option value="source-atop">source-atop</option>
+            <option value="destination-over">destination-over</option>
+            <option value="destination-in">destination-in</option>
+            <option value="copy">copy</option>
+            <option value="xor">xor</option>
+            <option value="destination-out">destination-out</option>
+            <option value="destination-atop">destination-atop</option>
+            <option value="lighter">lighter</option>
+          </select>
+        </div>
+        <div class="ui segment">
+          <!-- area for canvas-element -->
+          <div class="aspect-container">
+            <canvas id="myCanvas" width="100" height="100"></canvas >
+          </div>
+        </div>
+        <div class="ui segment">
+          <button id="b-screenshot" class="ui button">Create Screenshot</button>
+          <a id="link"></a>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
