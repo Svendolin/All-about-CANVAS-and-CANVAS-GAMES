@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+
+<html>
+  <head>
+      <title>Rendering Text</title>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <link rel="stylesheet" type="text/css" href="core/lib/semantic-ui/semantic.min.css">
+
+      <style> 
+        .aspect-container {
+          position: relative;
+          padding: 0 0 50% 0;
+          height: 0;
+          overflow: hidden;
+        }
+        #myCanvas {
+          width: 100%; 
+          height: 100%; 
+          position:absolute;
+          top:0;
+          left:0;
+        }
+        #link {
+          display: none;
+        }
+      </style>
+
+      <script src="core/lib/jquery-3.2.1.js"></script>
+
+      <script>
+        /// --- Leere Werte in Variable (denen fügen wir unten Werte zu) --- ///
+        let refCanvas = undefined;
+        let ctx = null;
+        let lastX = -300;
+        let lastRotation = 0;
+        
+        function init() {
+          refCanvas = document.getElementById("myCanvas");
+          if (refCanvas.getContext) {
+            ctx = refCanvas.getContext('2d', {alpha: true});
+            resizeCanvas();
+            paint();
+          }
+          
+          window.addEventListener("resize", function() {
+            resizeCanvas();
+          });
+        };
+
+        /// --- Resize, damit das Canvas dynamisch gehalten wird beim grösser und kleinermachen --- ///
+        function resizeCanvas() {
+          refCanvas.width = refCanvas.clientWidth;
+          refCanvas.height = refCanvas.clientHeight; 
+        }
+        
+        function paint() {
+          if (ctx != null) { //Variable zu Beginn 0
+
+            /// --- Jeder Context, Befehl, Einflüsse werden abgespeichert --- ///
+            ctx.save();
+            
+            ctx.clearRect(0, 0, refCanvas.width, refCanvas.height);
+
+            /// --- Hier fügen wir den Beispieltext ein und geben ihm die Eigenschaften --- ///
+            let text = "Beispieltext";
+            ctx.font = "bold 30px Algerian";
+
+            /// --- textW = Textwidth, in der Console wollen wir herausfinden, wie breit der Text ist. --- ///
+            let textW = ctx.measureText(text);
+            console.log(textW.width);
+            
+
+            /// --- Einstellungen für den Gradienten Verlauf --- ///
+            let gradient = ctx.createLinearGradient(10, 0, textW.width, 0);
+            gradient.addColorStop(0, "#00ff00");
+            gradient.addColorStop(0.25, "red");  // Statt 0.25 kann auch math.random() eingebaut werden
+            gradient.addColorStop(1.0, "blue");
+
+            /// --- Um Schrift Farbe, Grösse und Typus zu geben: --- ///
+            ctx.fillStyle = gradient;      // Hier einen Hexcode eingeben, um mit dieser default Farbe zu starten (#000000 z.B) oder wie hier mit Gradient, welcher in der oberen Variable definiert ist.
+            
+            
+            /// --- Geschwindigkeit der Rotation regeln mit einer externen Variable --- /// 
+            lastRotation += 5;
+
+            /// --- 0-Punkt zur Mitte schieben, um perfekt zu rotieren --- ///
+            ctx.translate(150,150);
+
+            /// --- Text Rotieren --- ///
+            ctx.rotate(lastRotation*(Math.PI/180)); // NICHT mit Grad sondern Radianten rechnen. 180 Grad sind 3.141. In diesem Beispiel sind 15 der Gradwert        
+            
+            // --- Für Animation notwending --- //
+            // lastX += 2;
+
+            ctx.textAlign = "center";
+            ctx.textBaseline = "middle";
+
+            /// --- Text wird hier gerendert --- ///
+            ctx.fillText(text, 0, 0,)  // Textabstände X und Y zu Canvasrand (text, lastX, 50 - lastX einbauen falls man möchte)
+            // ctx.fillRect(0,0,refCanvas.width, refCanvas.height); Zu testzwecken, wie der Gradient aufgebaut ist
+
+            /// --- Alles Gezeichnete zurücksetzen --- ///
+            ctx.restore()
+
+            setTimeout (paint, 50);  // So sagen wir dem Broswer, dass in bestimmter Zeit die Funktion ausgeführt werden soll. z.B für Timeout Cookies
+            // Somit Bewegung alle 0.5s
+          }
+        }
+        
+        /// --- Document.ready als Kurzform --- ///
+        $(function() {
+            init();
+        });
+      </script>
+  </head>
+  <body>
+    <div class="ui raised padded container segment">
+      <div class="ui segments">
+        <div class="ui segment">
+          <h3>Canvas - Wie man Text rendern kann...</h3>
+        </div>
+        <div class="ui segment">
+          <!-- area for canvas-element -->
+          <div class="aspect-container">
+            <canvas id="myCanvas" width="100" height="100"></canvas >
+          </div>
+          <!-- end of area for canvas-element -->
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
