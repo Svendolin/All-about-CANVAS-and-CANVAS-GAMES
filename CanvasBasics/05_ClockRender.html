@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<!--
+Moment.js = Library für Datum und weiteres. Falls erwünscht, Verlinkung, wie gewohnt als Script-Tag
+-->
+<html>
+  <head>
+      <title>Rendering Clock</title>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <link rel="stylesheet" type="text/css" href="core/lib/semantic-ui/semantic.min.css">
+
+      <style> 
+        .aspect-container {
+          position: relative;
+          padding: 0 0 50% 0;
+          height: 0;
+          overflow: hidden;
+        }
+        #myCanvas {
+          width: 100%; 
+          height: 100%; 
+          position:absolute;
+          top:0;
+          left:0;
+        }
+        #link {
+          display: none;
+        }
+      </style>
+
+      <script src="core/lib/jquery-3.2.1.js"></script> <!-- Standard Link zu JQuery -->
+      <script src="core/lib/semantic-ui/semantic.min.js"></script>
+      <script src="core/lib/howler.js"></script> <!-- Audio Library für den tickSound -->
+
+      <script>
+        /// --- Variablen für die einzelnen Elemente definieren und im Laufe des Codes Value beisteuern --- ///
+        let refCanvas = undefined; // Canvas ist die Zeichenfläche
+        let ctx = null;            // CTX Sind die Zeiger, welche sich passend zur echten Uhr bewegen
+        let bgimg = null;          // Hintergrundbild (Ziffernblatt)
+        let tickSound = null;      // Ticksound
+        
+        /// --- Canvas, Zeichenfläche, Initialisieren (Ablauf eigentlich immer gleich)
+        function init() {   
+          refCanvas = document.getElementById("myCanvas");
+          if (refCanvas.getContext) {
+            ctx = refCanvas.getContext('2d', {alpha: true});
+            resizeCanvas();
+          }
+          
+          /// --- Dynamische Grösse --- ///
+          window.addEventListener("resize", function() {
+            resizeCanvas();
+          });
+          
+          // Klick zeigt welche Koordinaten in der Console gezeigt wird
+          $("#myCanvas").on("mousedown", function (evt) {
+            let cPos = getPositionFromEvent(evt, refCanvas);
+            console.log("x:" + cPos.x + ", y:" + cPos.y);
+          });
+          
+          $("#b-screenshot").on("click", function(evt) {
+            if (refCanvas.msToBlob) { //for IE
+              let blob = refCanvas.msToBlob();
+              window.navigator.msSaveBlob(blob, 'canvas.png');
+            } else {
+              // Aufbau für andere Browser
+              let link = document.getElementById('link');
+              link.setAttribute('download', 'canvas.png');
+              link.setAttribute('href', refCanvas.toDataURL("image/png").replace("image/png", "image/octet-stream"));
+              link.click();
+            }
+
+          });
+
+        /// --- Bild initialisieren (Quasi wie bei Aufgabe 04) und laden, Variable dazu oben let bgimg = null --- ///
+        bgimg = new Image();
+        bgimg.src = "media/zifferblatt.png"
+        bgimg.onload = function() {
+          checkStartClock();
+        };
+
+        /// --- HOWL Tonobjekt initialisieren
+        let tempHowl = new Howl({
+          src: ["media/clock-ticking-2_10s_loopable.mp3"],
+            autoplay: false, // Erst dann abspielen, wenn die Uhr geladen ist, deshalb false
+            loop: true,
+            volume: 1,
+
+            onload: function() {
+              tickSound = this;
+              checkStartClock();
+            }
+        });
+          
+        };
+
+        function checkStartClock() { //Sobald Hintergrundbild (Ziffernbild) geladen wurde, kann die Uhr gestartet werden
+          if (tickSound != null && bgimg.complete) { // Testen ob der Sound geladen wurde
+          setInterval(paint, 1000); // Interval für Bilder alle 1000ms, wegen Sekundenzeiger.
+          }
+        }
+
+        function getPositionFromEvent(event, refCanvas) {
+          let result = { x: 0, y:0};
+
+          if (event.x != undefined && event.y != undefined) {
+            result.x = event.x;
+            result.y = event.y;
+          }
+          else {
+            result.x = event.clientX;
+            result.y = event.clientY;
+          }
+          
+          let elemInfos = refCanvas.getBoundingClientRect();
+
+          result.x -= parseInt(elemInfos.left);
+          result.y -= parseInt(elemInfos.top);
+
+          return result;
+        }
+
+        /// --- Methode ResizeCanvas --- ///
+        function resizeCanvas() {
+          refCanvas.width = refCanvas.clientWidth;
+          refCanvas.height = refCanvas.clientHeight;
+        }
+        
+        /// --- Optische und funktionale Dinge einbauen (Zeiger etc) --- ///
+        function paint() {
+          console.log("Hallo Welt");
+          if (ctx != null) { // Kontext vorhanden? Dann:
+            ctx.clearRect(0, 0, refCanvas.width, refCanvas.height); // Hintergrund löschen
+            
+            ctx.save(); // Code speichern
+
+            /// --- Aktuelle Zeit anzeigen --- ///
+            let hours = 0, minutes = 0, seconds = 0; // Variablen deklarieren
+            if ($("#i-timeswitcher").val() == "inputtime") { // Timeswitcher abfragen, ob er auf Inputtime gestellt ist
+              hours = parseInt($("#i-time-h").val()); // Wert rausnehmen, als Ganzzahl (ParseInt) zurückleiten. Gilt jeweils für h, min, s
+              minutes = parseInt($("#i-time-min").val());
+              seconds = parseInt($("#i-time-s").val());
+            }
+            else { // Datumobjekt, welches mit der aktuellen Zeit gefüllt ist  (LIVETIME) - Aufbau dazu findet man im Internet.
+              let actData = new Date(); // Javascript kann das Datumobejkt lesen und auf auf h, min, s zurückführen
+              hours = actData.getHours();
+              minutes = actData.getMinutes();
+              seconds = actData.getSeconds();
+            }
+            
+            /// --- Stunden verrechnen --- ///
+            if (hours >= 12) { // So prüfen wir gültigen Zeitwert
+              hours -= 12;
+            }
+            
+            /// --- Werte für alle Zeiger --- ///
+            ctx.lineCap = "round"; // Wenn wir das vor dem ersten save() schreiben, gilt dieser Wert für alle Zeiger
+            
+            
+            /// --- Hintergrundbild zeichnen --- ///
+            ctx.translate(refCanvas.width/2, refCanvas.height/2);
+
+            let newImgWidth = refCanvas.height * (bgimg.width / bgimg.height);
+
+            ctx.drawImage(bgimg, newImgWidth/2 * (-1), refCanvas.height/2 * (-1), newImgWidth, refCanvas.height);
+            
+            
+            /// --- Stundenzeiger Rendern (Wie Linien Rendern, siehe 04) --- ///
+            ctx.save(); // Speichert alle Drehungen. Gleicher Stand wie am Anfang dadurch
+            let hoursRotate = (hours * 30) + (minutes * 0.5) + (seconds * (0.5/60));  // (Da: 1h sind 30 Grad. 12 bis 3 Uhr z.B 3h sind somit 90 Grad) / + (minutes*0.5 = Stundenzeiger bewegt sich pro h 30 Grad = 0.5 Grad pro Minute, wären 6/12)...
+            ctx.rotate(hoursRotate*(Math.PI/180));                                    // ...(seconds * 0.5/60, da der Stundenzeiger sich innerhalb des Einen Strichchens nochmals um 0.0083 Grad bewegt)
+
+
+            ctx.beginPath(); // Siehe Cheatsheet oder im Notizblock unter "Pfade im Canvas"
+            ctx.moveTo(0, 0); // Startpunkt
+            ctx.lineTo(0, refCanvas.height/2 * (-0.5)); // "Eundpunkt" quasi 
+            ctx.strokeStyle = "red"; //Farbe der Linie definieren, bevor wir diese nachher erst defnieren
+            ctx.lineWidth = 8;
+            
+            ctx.stroke();  // Stellt die Linie visuell dar
+            ctx.restore(); // Ganzer Code in save() und restore() einbinden, jeder zeiger wird somit in seinen eigenen Context gestellt
+            
+            
+            /// --- Minutenzeiger rendern --- ///
+            ctx.save();
+            let minutesRotate = (minutes * 6) + (seconds * 6/60);  // (Da: 360 Grad / 60 Grad = 6 Grad für die Minutenabschnitte) + (Innerhalb in der Sekundenspanne bw)
+            ctx.rotate(minutesRotate*(Math.PI/180));
+
+
+            ctx.beginPath(); // Ablauf: Siehe Cheatsheet oder im Notizblock unter "Pfade im Canvas". Mit beginPath() starten und restore() enden
+            ctx.moveTo(0, 0);
+            ctx.lineTo(0, refCanvas.height/2 * (-0.7));
+            ctx.strokeStyle = "blue";
+            ctx.lineWidth = 3;
+            ctx.stroke();
+            ctx.restore();
+            
+            
+            /// --- Sekundenzeiger rendern --- ///
+            ctx.save();
+            let secondsRotate = seconds * 6;  // Da: Jede Sekunde sind 6 Grad auf der Uhr. Das 60mal (Um eine Minute zu erreichen) ergibt 360 Grad
+            ctx.rotate(secondsRotate*(Math.PI/180));
+
+
+            ctx.beginPath(); // Ablauf: Siehe Cheatsheet oder im Notizblock unter "Pfade im Canvas". Mit beginPath() starten und restore() enden
+            ctx.moveTo(0, 0);
+            ctx.lineTo(0, refCanvas.height/2 * (-0.9));
+            ctx.strokeStyle = "#00FF00";
+            ctx.lineWidth = 1;
+            ctx.stroke();
+            ctx.restore();
+
+          
+            
+            /// --- Uhrzeiger überlappen lassen --- ///
+             
+            ctx.fillStyle = "#000000";
+            ctx.beginPath();
+            ctx.arc(0,0,5,0, 2*Math.PI);
+            ctx.fill();
+            
+            
+            ctx.restore();
+          } 
+        }
+        
+        $(function() {
+            init();
+        });
+      </script>
+  </head>
+  <body>
+    <div class="ui raised padded container segment">
+      <div class="ui segments">
+        <div class="ui segment">
+          <h3>Canvas - Uhrzeit (Livetime + Inputtime) </h3>
+        </div>
+        <div class="ui segment">
+
+          <!-- Select Button mit den beiden Switches -->
+          <select class="ui dropdown" id="i-timeswitcher">
+            <option value="inputtime" >Input-Time</option>
+            <option value="livetime" selected="selected">Live-Time</option>
+          </select>
+          
+          <div class="ui labeled input">
+            <div class="ui label">
+              h
+            </div>
+            <input id="i-time-h" type="number" value="16">
+          </div>
+          <div class="ui labeled input">
+            <div class="ui label">
+              min
+            </div>
+            <input id="i-time-min" type="number" value="33">
+          </div>
+          <div class="ui labeled input">
+            <div class="ui label">
+              s
+            </div>
+            <input id="i-time-s" type="number" value="59">
+          </div>
+        </div>
+        <div class="ui segment">
+          <!-- Area für das Canvas Element -->
+          <div class="aspect-container">
+            <canvas id="myCanvas" width="100" height="100"></canvas >
+          </div>
+          <!-- Ende der Area für das Canvas Element -->
+        </div>
+        <div class="ui segment">
+          <button id="b-screenshot" class="ui button">Create Screenshot</button>
+          <a id="link"></a>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
