@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html>
+  <head>
+      <title>Drawing Editor</title>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <link rel="stylesheet" type="text/css" href="core/lib/semantic-ui/semantic.min.css">
+
+      <style> 
+        .aspect-container {
+          position: relative;
+          padding: 0 0 50% 0;
+          height: 0;
+          overflow: hidden;
+        }
+        #myCanvas {
+          width: 100%; 
+          height: 100%; 
+          position:absolute;
+          top:0;
+          left:0;
+        }
+        #link {
+          display: none;
+        }
+      </style>
+
+      <script src="core/lib/jquery-3.2.1.js"></script>
+      <script src="core/lib/semantic-ui/semantic.min.js"></script>
+
+      <script>
+        let refCanvas = undefined;
+        let ctx = null;
+        let mouseClicked = false;
+        
+        const Commands = {
+          clearall: "clearall",
+          draw: "draw"
+        }
+        
+        // Initialisierung, um mit der Maus zeichnen zu können
+        function init() {
+          refCanvas = document.getElementById("myCanvas");
+          if (refCanvas.getContext) {
+            ctx = refCanvas.getContext('2d', {alpha: true}); // Transparenter 2d Alpha canvas
+            resizeCanvas();
+          }
+          
+          window.addEventListener("resize", function() {
+            resizeCanvas();
+          });
+
+          $("#b-clearall").on("click", function() {
+            paint(Commands.clearall, null);
+          })
+
+          // --- Befehl für SCREENSHOT, damit wir die Zeichnung herunterladen können --- //
+          $("#b-screenshot").on("click", function(evt) {
+            if (refCanvas.msToBlob) { //for IE
+              let blob = refCanvas.msToBlob();    
+              window.navigator.msSaveBlob(blob, 'canvas.png');
+            } else {
+              //other browsers
+              let link = document.getElementById('link');                                                             //a tag ganz unten anwählen
+              link.setAttribute('download', 'canvas.png');                                                            // Als Download generieren
+              link.setAttribute('href', refCanvas.toDataURL("image/png").replace("image/png", "image/octet-stream")); // Download Typus generieren
+              link.click();                                                                                           // Durch denk Link wird der Download gestartet
+            }
+            
+          });
+
+
+          // MOUSEDOWN > MOUSEMOVE > MOUSEUP //
+          //=> MouseDown = Click auf Taste --- //
+          refCanvas.addEventListener("mousedown", (e) => {
+            let clickPosition = getPositionFromEvent(e, refCanvas);  
+            // console.log("Event: mousedown"); Zeigt an in der Konsole, dass der Mausklicklick nach unten (Push) funktioniert
+           // console.log(clickPosition);  // So lassen wir in der Console X und Y Wert anzeigen
+            mouseClicked = true;
+            paint(Commands.draw, clickPosition); // <--- BEFEHL, dass wirbeim Klicken zeichnen wollen!
+          });
+
+          //=> MouseMove = Herumfahren mit der Maus --- //
+          refCanvas.addEventListener("mousemove", (e) => {
+           if (mouseClicked) {
+            let clickPosition = getPositionFromEvent(e, refCanvas); 
+            // console.log("Event: mousemove"); Zeigt einfach in der Konsole an, dass diese Funktion funktioniert. 
+            console.log(clickPosition);     // So lassen wir in der Console X und Y Wert anzeigen
+            paint(Commands.draw, clickPosition); // <-- BEFEHL, dass wir beim bewegen zeichnen wollen!
+          }
+          });
+          //=> MouseUp = Taste loslassen --- // 
+          refCanvas.addEventListener("mouseup", (e) => {
+            // console.log("Event: mouseup"); Zeigt an in der Konsole, dass der Klick Release funktioniert
+            mouseClicked = false;
+          });
+
+        }
+         
+        function getPositionFromEvent(event, refCanvas) {
+          let result = { x: 0, y:0};
+
+          if (event.x != undefined && event.y != undefined) {
+            result.x = event.x;
+            result.y = event.y;
+          }
+          else { 
+            result.x = event.clientX;
+            result.y = event.clientY;
+          }
+          
+          //calc position relative to canvas
+          let elemInfos = refCanvas.getBoundingClientRect();
+          result.x -= parseInt(elemInfos.left);
+          result.y -= parseInt(elemInfos.top);
+
+          return result;
+        }
+
+        // Clear All Button Funktion
+        function resizeCanvas() {
+          refCanvas.width = refCanvas.clientWidth;
+          refCanvas.height = refCanvas.clientHeight;
+          paint(Commands.clearall);
+        }
+        
+
+                                                                    // Wenn man die linke Maustaste DRÜCKT, dann sollen schwarze 10x10 Punkte kommen. x und y sind bei 81 definiert
+        function paint(cmd, posData = null) { //
+          if (ctx != null) {                                        // Wenn der Fehler nicht null istm z.b bei einem Fehler geprüft
+            if ((cmd == Commands.draw) && (posData != null)) {      // Werte bei den einzelnen Option Segmenten in den unteren Zeilen holen
+              
+              
+              ctx.globalAlpha = parseFloat($('#i-alphavalue').val());  // Wert zwischen 0-1, deshalb ParseFloat nicht parsInt
+              ctx.globalCompositeOperation = $("#i-compositeoperation").val();    // Aus dem Cheatsheet für die Deckkraft 0-1 (Zeile 112 bis 120)
+              
+              ctx.fillStyle = ctx.strokeStyle = "#" + $("#i-colorhex").val();
+              let sizeRect = parseInt($("#i-rectsize").val());       // ParseInt sorgt dafür, dass das ausgewählte ID Element als effektiver Wert genommen wird als Ganzzahl
+              let lineWidth = parseInt($("#i-strokewidth").val());
+
+              ctx.lineWidth = lineWidth;
+            
+            if($("#i-drawstyle").val() === "fill") {
+              ctx.fillRect(posData.x, posData.y, sizeRect,sizeRect);
+              
+            }
+            else {
+              ctx.strokeRect(posData.x, posData.y, sizeRect,sizeRect);
+            } 
+          } 
+            else {
+              ctx.clearRect(0, 0, refCanvas.width, refCanvas.height);
+            }
+          }
+        }
+        
+        $(function() {
+            init();
+        });
+      </script>
+  </head>
+  <!-- Alle HTML Elemente in a Nuthsell -->
+  <body>
+    <div class="ui raised padded container segment">
+      <div class="ui segments">
+        <div class="ui segment">
+          <h3>Canvas - Painting Editior</h3>
+        </div>
+        <div class="ui segment">
+          <button id="b-clearall" class="ui button">Clear All</button>
+          <select class="ui dropdown" id="i-type">
+            <option value="rect">rect</option>
+            <option value="circle">circle</option>
+          </select>
+          <select class="ui dropdown" id="i-rectsize">
+            <option value="1">1x1 px</option>
+            <option value="2">2x2 px</option>
+            <option value="4" selected="selected">4x4 px</option>
+            <option value="8">8x8 px</option>
+            <option value="16">16x16 px</option>
+            <option value="32">32x32 px</option>
+            <option value="64">64x64 px</option>
+            <option value="128">128x128 px</option>
+          </select>
+          <select class="ui dropdown" id="i-drawstyle">
+            <option value="fill">fill</option>
+            <option value="stroke">stroke</option>
+          </select>
+          <select class="ui dropdown" id="i-strokewidth">
+            <option value="1">1px (stroke)</option>
+            <option value="2">2px (stroke)</option>
+            <option value="4" selected="selected">4px (stroke)</option>
+            <option value="6">6px (stroke)</option>
+            <option value="8">8px (stroke)</option>
+            <option value="10">10px (stroke)</option>
+          </select>
+          <div class="ui labeled input">
+            <div class="ui label">
+              Color-Hex
+            </div>
+            <input id="i-colorhex" type="text" value="ff0000">
+          </div>
+          <select class="ui dropdown" id="i-alphavalue">
+            <option value="0.2">Alpha (0.2)</option>
+            <option value="0.4">Alpha (0.4)</option>
+            <option value="0.6" selected="selected">Alpha (0.6)</option>
+            <option value="0.8">Alpha (0.8)</option>
+            <option value="1">Alpha (1.0)</option>
+          </select>
+          <select class="ui dropdown" id="i-compositeoperation">
+            <option value="source-over">source-over</option>
+            <option value="source-in">source-in</option>
+            <option value="source-out">source-out</option>
+            <option value="source-atop">source-atop</option>
+            <option value="destination-over">destination-over</option>
+            <option value="destination-in">destination-in</option>
+            <option value="copy">copy</option>
+            <option value="xor">xor</option>
+            <option value="destination-out">destination-out</option>
+            <option value="destination-atop">destination-atop</option>
+            <option value="lighter">lighter</option>
+          </select>
+        </div>
+        <div class="ui segment">
+          <!-- area for canvas-element -->
+          <div class="aspect-container">
+            <canvas id="myCanvas" width="100" height="100"></canvas >
+          </div>
+          <!-- end of area for canvas-element -->
+        </div>
+        <div class="ui segment">
+          <button id="b-screenshot" class="ui button">Create Screenshot</button>
+          <a id="link"></a>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
