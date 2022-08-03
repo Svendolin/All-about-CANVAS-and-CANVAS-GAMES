@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<!--
+Copyright 2017 by Pascal Stoop
+-->
+<html>
+  <head>
+      <title>Exercise 6b</title>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <link rel="stylesheet" type="text/css" href="core/lib/semantic-ui/semantic.min.css">
+
+      <style> 
+        .aspect-container {
+          position: relative;
+          padding: 0 0 50% 0;
+          height: 0;
+          overflow: hidden;
+        }
+        #myCanvas {
+          width: 100%; 
+          height: 100%; 
+          position:absolute;
+          top:0;
+          left:0;
+        }
+      </style>
+
+      <script src="core/lib/jquery-3.2.1.js"></script>
+      <script src="core/lib/semantic-ui/semantic.min.js"></script>
+
+      <script>
+        // Variablen sind ausserhalb der Paint methode, da die Variable global definiert ist und bei jedem Loop neu gestartet wird
+        let refCanvas = undefined;
+        let ctx = null;
+        let img = null;
+        let rotationDegree = 0;  // Hier z.B 5 eingeben für 5 Grad. Start soll bei 0 sein
+        
+        function init() {
+          refCanvas = document.getElementById("myCanvas");
+          if (refCanvas.getContext) {
+            ctx = refCanvas.getContext('2d', {alpha: true});
+            resizeCanvas();
+          }
+          
+          window.addEventListener("resize", function() {
+            resizeCanvas();
+          });
+          
+          /// --- Bild Laden mit temporärer (sieht man nicht im Vordergrund) IMG-Tag --- ///
+          img = new Image (); // Zugriff in den DOM, quasi ein IMG-tag
+          img.src = "media/zebra.jpg";
+          img.onload = function () {    // Bild laden...
+            paint();  //...sobald dies geladen ist, wird paint() ausgeführt und gerendert.
+          };
+          
+        };
+
+        function resizeCanvas() {
+          refCanvas.width = refCanvas.clientWidth;
+          refCanvas.height = refCanvas.clientHeight;
+          paint();
+        }
+        
+        function paint() {
+          if ((ctx != null) && (img != null)) { //Wennn Bild und Kontext nicht null sind, sind sie fertig geladen
+            ctx.clearRect(0, 0, refCanvas.width, refCanvas.height);
+            //check if image is available
+            
+            ctx.save();
+
+            // --- Variablen der Höhe und Breite --- //
+            let imgRatio = img.width / img.height; // Orignalbild wäre zu gross. Höhe und Breite müssen wir selber angeben
+            let imageWidth = 250;
+            let imageHeight = imageWidth / imgRatio; // Ergibt, dass das Bild 1.3x breiter ist als höher = Bildverhältnis (z.B 16:9 = 1.7)
+
+            // --- transform/rotate --- //
+            ctx.translate(50 + imageWidth/2, 50 + imageHeight/2); // 0-Punkt in die Mitte setzen
+            rotationDegree += 2; // Dreheung in Grad. Wieviel Grad pro x-Sekunde. Zeit definieren wir bei setTimeout
+            ctx.rotate(rotationDegree * (Math.PI/180)); // Dadurch können wir mit GRAD rechnen
+
+            
+
+            
+            /// --- Bild DIREKT rendern --- /// 
+            // https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/drawImage
+            //  ctx.drawImage(img, 10, 10);
+            ctx.drawImage(img, imageWidth/2*(-1), imageHeight/2*(-1), imageWidth, imageHeight); // Um Mittelpunkt mittig des Bildes zu setzen
+            // ctx.drawImage(img, sx, sy, sWidth, sHeight, dx, dy, dWidth, dHeight); // S = SourceImage , D = Destination Canvas
+
+
+            ctx.restore();
+
+            setTimeout (paint, 50);  // So sagen wir dem Broswer, dass in bestimmter Zeit die Funktion ausgeführt werden soll. Somit Bewegung alle 0.5s
+
+            //draw image in steps
+
+            //draw image in steps
+            let can2 = document.createElement('canvas');
+            can2.width = img.width/2;
+            can2.height = img.height/2;
+            var ctx2 = can2.getContext('2d');
+
+            ctx2.drawImage(img, 0, 0, img.width/2, img.height/2);
+            ctx2.drawImage(can2, 0, 0, img.width/2, img.height/2, 0, 0, img.width/4, img.height/4);
+            ctx2.drawImage(can2, 0, 0, img.width/4, img.height/4, 0, 0, img.width/6, img.height/6);
+            // Am Schluss wird das Element in den richtigen ctx- Canvas eingefügt
+            ctx.drawImage(can2, 0, 0, img.width/6, img.height/6, 350, 0, img.width/8, img.height/8); // 350 verschiebt das Bild 350Pixel auf der X-Achse nacgh
+              
+          }
+        }
+        
+        $(function() {
+            init();
+        });
+      </script>
+  </head>
+  <body>
+    <div class="ui raised padded container segment">
+      <div class="ui segments">
+        <div class="ui segment">
+          <h3>Canvas - Wie man Bilder rendert...</h3>
+        </div>
+        <div class="ui segment">
+          <!-- area for canvas-element -->
+          <div class="aspect-container">
+            <canvas id="myCanvas" width="100" height="100"></canvas >
+          </div>
+          <!-- end of area for canvas-element -->
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
