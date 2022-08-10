@@ -1,0 +1,6 @@
+{
+    "compilerOptions": {
+        "target": "es5", //es5 versteht kein let für Variablen
+        "sourceMap": true
+    }
+}

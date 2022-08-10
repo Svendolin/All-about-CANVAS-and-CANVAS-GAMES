@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Video Tag</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" type="text/css" href="core/lib/semantic-ui/semantic.min.css">
+        
+        <style> 
+
+        .videoplayer {
+          width: 100%;
+          height: auto;
+          /* Ergibt responsive Breite */
+
+        }
+            
+          /* Eingeschränkte Variante - SEHR EMPFOHLEN = VIDEO.JS LIBRARY */
+
+            ::cue(.red){ color: red; }   /* ::cue(.red) = Pseudoklasse, zu sehen bei VTT / Sub with Style*/
+            ::cue(.blue){ color: blue; }
+            ::cue(.green){ color: green; }
+            ::cue(.yellow){ color: yellow; }
+            ::cue(.bg-red){ background-color: red; }
+            ::cue(.bg-blue){ background-color: blue; }
+            ::cue(.bg-green){ background-color: green; }
+            ::cue(.bg-yellow){ background-color: yellow; }
+        </style>
+        
+        <script src="core/lib/jquery-3.2.1.js"></script>
+        <script src="core/lib/semantic-ui/semantic.min.js"></script>
+        
+    </head>
+    <body>
+      <div class="ui raised padded container segment">
+        <div class="ui segments">
+        <div class="ui segment">
+          <h3>Video & Audio for Web (Basics) - Exercise 1-3</h3>
+        </div>
+        <div class="ui segment">
+          <!-- HTML Video Tag... -->
+          <video class="videoplayer" controls loop poster="core/media/img/video_still.jpg">     <!-- Reihenfolge spielt KEINE Rolle -->
+            <source src="core/media/video/Wildlife.mp4" type="video/mp4">                       <!-- Reihenfolge spielt eine Rolle -->
+            <source src="core/media/video/Wildlife.ogv" type="video/ogv">
+            <source src="core/media/video/Wildlife.webm" type="video/webm">
+            <track kind="subtitles" src="core/media/vtt/subtitles_with_styles_de.vtt" srclang="de" label="Deutsch" default> <!-- Standardmässig auf OFF. Im Browser bei ... einschalten. Ausser man schreibt DEFAULT für den Standardmässigen Gebrauch -->
+            <track kind="subtitles" src="core/media/vtt/subtitles_en.vtt" srclang="en" label="English"> 
+            Your browser does not support the video tag.
+          </video>
+
+          <!-- IN DEN VIDEO TAG FALLS GEWÜNSCHT:
+              - Controls weglassen, wenn der Playbutton, Lautstärke etc nicht zu sehen sein soll
+              - Width="" height=""
+              - Autoplay = Sofortstart / loop = Endlosschlaufe 
+            -->
+          
+          
+        </div>
+        <div class="ui segment">
+          <strong>Download video:</strong> <a href="core/media/video/sae_spot.mp4">MP4 format</a> | <a href="core/media/video/sae_spot.ogv">Ogg format</a> | <a href="media/video/sae_spot.webm">WebM format</a>
+        </div>
+       </div>
+      </div>
+    </body>
+</html>

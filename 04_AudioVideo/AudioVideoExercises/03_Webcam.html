@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<!--
+Copyright 2017 by SAE Institute Zurich
+-->
+<html>
+    <head>
+        <title>Exercise 5</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" type="text/css" href="core/lib/semantic-ui/semantic.min.css">
+        
+        <style>
+            .videoplayer {
+                width: 100%;
+                height: auto;
+            }    
+        </style>
+        
+        <script src="core/lib/jquery-3.2.1.js"></script>
+        <script src="core/lib/semantic-ui/semantic.min.js"></script>
+        
+        <script>
+          let refVideoControl = null;
+          function init() {
+            refVideoControl = document.getElementsByClassName("videoplayer")[0];
+            // Abfragen, ob diese Methode zur Verfügung steht...
+            if (navigator.mediaDevices) {
+              // wir geben der Methode mit, was wir gerne haben möchten (z.B Video wollen wir, Audio aber nicht)
+                  navigator.mediaDevices.getUserMedia({
+                      video: {          // Statt TRUE {} einbauen mit width und height, ideal und max, um Auflkösung anzupassen
+                        width: {min: 640, ideal: 1920, max: 1920},
+                        height: {min: 480, ideal: 1080, max: 1080},
+                      },
+                      audio: false      // Mittels FALSE abgestellt
+                  })
+                  // Versprechen, d.h IF das passiert (erfolgreich ist), DANN mache diese Funktion:
+                  .then(function onSuccess(stream) {
+                    refVideoControl.autoplay = true; // Für die automatische Öffnung des Streams
+                    refVideoControl.srcObject = stream; // Für die automatische Öffnung des Streams
+                  })
+                  // Falls es einen Fehler geben würde...
+                  .catch(function onError(err) {
+                    alert("Whoops...Something went wrong!");
+                  });
+            } 
+            // Auflösung --- x --- anzeigen lassen:
+            $(refVideoControl).on("loadedmetadata", function() {
+              $(".video-data").html("Resolution: " + refVideoControl.videoWidth + " x " + refVideoControl.videoHeight);
+            })
+          }
+          $(function() {
+              init();
+          });
+        </script>
+        
+    </head>
+    <body>
+      <div class="ui raised padded container segment">
+        <div class="ui segments">
+        <div class="ui segment">
+          <h3>Video & Audio for Web (Basics) - Exercise 5</h3>
+        </div>
+        <div class="ui segment">
+          <video class="videoplayer" width="640" height="360">
+          </video>
+        </div>
+        <div class="ui segment video-data">
+          
+        </div>
+       </div>
+      </div>
+    </body>
+</html>

@@ -1,0 +1,34 @@
+TYPESCRIPT = Javascript Versionen für alle Broswer mit HTML5 brauchbar machen und weniger Fehler machen mit Javascript!
+=> In Typescript sind die neuesten Javascript Versionen egal, man kann es entsprechend kompilieren
+=> In Typescript werden Fehler schnell erkannt
+
+(node.js anschauen)
+Typescript sorgt dafür, dass man kompilieren kann für HTML5 Broswer.
+(ES1 damals gebaut für Formvalidierung. ES6 ECMAScript wurde recht Relevant ab 2015, weil HTML5 auch auf Javascript gesetzt hat).
+- Libraries sind schon integriert, z.B Angular (Frameworks allgemein sind mit Typescript programmiert)
+- Typenprüfungen, ob .src z.B auch wirklich ein SRC Attribut hat (Fehler finden, Laufzeitfehler finden. z.B witdh statt width) = Laufzeitfehler können so vermieden werden.
+- Prüfen, dass Programmcode funktionieren.
+- Berschreibende Elemente, welche JS nicht beeinflussen. Mit Typescript kann nicht mehr als JS geschrieben werden, da am Ende alles zu JS komprimiert wird.
+- In Typescript Javascript schreiben, und anschliessend in die gewünschte JS-version (z.B ES6) kompilieren. 
+- OOP ist integriert (Klassen, Vererbung).
+
+OOP = Objektoriented Programming (Programmierstil, wo alles in Objekte beschrieben wird):
+Container (z.B ein Haus), das besitzt Eigenschaften (Permanent zugewiesene Variablen zum Objekt, Zimmer, Stockwerke) etc. 
+Auf diesem Objekt kann man Funktionen übergeben, befehle (z.B. verkaufen() / farbeÄndern() etc)
+Das Tolle hierbei:
+Man erstellt mit OOP sauber einen Bauplan (Klasse), so kann man identisch das Haus innert kürze 100 mal bauen z.B.
+Pro Objekttyp gibt es eine eigene Klasse. (Es gibt zwar 100 Häuser, allerdings bekommen sie unterschiedliche Versicherungen als Beispiel)
+
+Vererbung in der OOP:
+Fahrzeug = Oberklasse, Auto = Unterklasse , Audi = Typus der Unterklasse und und und.
+
+Unterschied (grob) von PPG / OOP
+PPG = Prozedurale Programmierung (Daten sind in einer Datenbank, eine Box - Plus: Kleine Boxen (Funktionen), die auf die Datenbank zugreift) 
+(Eine Sprache wäre "C", Hardwaresprache quasi)
+OOP = Jedes objekt selbst (Grosse Box) besitzt ein Datenpaket und Methodenpaket 
+(Eine Sprache wäre "C++" / "C-Sharp" = Diese wird in Befehle herunterkomprimiert, weil Objekte sonst nicht gelesen werden könnten bzw Objekte abgespeichert werden können)
+
+
+Beispiele zur Variablendeklaration:
+
+

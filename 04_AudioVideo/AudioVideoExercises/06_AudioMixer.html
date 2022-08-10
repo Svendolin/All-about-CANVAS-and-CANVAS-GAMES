@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<!--
+Copyright 2017 by SAE Institute Zurich
+-->
+<html>
+    <head>
+        <title>Exercise 10</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" type="text/css" href="core/lib/semantic-ui/semantic.min.css">
+        
+        <style>
+            .audioplayer {
+                width: 100%;
+                height: auto;
+            }    
+        </style>
+        
+        <script src="core/lib/jquery-3.2.1.js"></script>                    <!-- Verlinkung zu JQuery  (JS vereinfachung)-->
+        <script src="core/lib/semantic-ui/semantic.min.js"></script>        <!-- Verlinkung Semantischem JS-->
+        <script src="core/lib/howler.js"></script>                          <!-- Verlinkung zu HOWLER.JS-->
+        
+        <script>
+          // Namen der entsprechenden Sounddateien:
+          let allsoundnames = ["AcousticElectroA", "CamperA1", "CamperB1", "Inthemorning1", "Violin1"];  // Array Soundnamen entsprechen der Input Klassen und den Sounddateien
+          let sounds = [];  // zweite Variable: Wir verknüpfen die Audiodatien mit Howler, damit wir wie ein Audiotag START und STOP machen können
+          
+         // Nachdem bei 52 geklickt wird, soll der Mixer angezeigt werden, der Button aber vewschwinden
+          function init() {
+            $('.mixerelement').show();
+            $('#startbutton').hide();
+             // Interieren mit einem Loop durch alle Array-Soundnamen
+            for (let i = 0; i < allsoundnames.length; i++) {
+              //MACHEN: Neues Howler Audio Objekt (Siehe Howler.js > Docs > Examples git > Examples )
+              sounds[i] = new Howl ({
+                src: ['core/media/audio/' + allsoundnames [i] + '.mp3'],
+                autoplay: true,
+                loop: true,
+                volume: 0 // Am Anfang soll kein Sound erklingen
+              });
+              
+              $('input.' + allsoundnames[i]).on("change", function() {
+                let index = allsoundnames.indexOf(this.className); // Index von den entsprechden Namen geben, erster Name 1 etc
+                if ((index >= 0) && (index < sounds.length)) {
+                  // Hier verknüpfen wir den Index mit der Lautstärke "Value", auch zu lesen in Howler.JS
+                  sounds[index].volume(this.value); 
+                }
+              });
+            }
+          }
+          // Mit Init initialisieren wir die Funktion. Am ANFANG soll der Button da seinm die Mixer Elemente NICHT
+          $(function() {
+            $('#startbutton').one("click", init); // one = on.EventListener(ClickEvent)
+            $('.mixerelement').hide();
+          });
+        </script>
+    </head>
+    <body>
+      <!-- Range Input (Schieberegler)-->
+      <div class="ui raised padded container segment">
+        <div class="ui segments">
+        <div class="ui segment">
+          <h3>Video & Audio for Web (Basics) - Exercise 10 (Audiomixer)</h3>
+          <button id="startbutton">Start Sound</button>
+        </div>
+        <!-- jede Audiodatei mit entsprechender Klasse, Reglerlänge etc -->
+        <div class="ui segment mixerelement">
+          <div class="ui grid">
+            <div class="four wide column">Acoustic Electro A</div>
+            <div class="twelve wide column"><input class="AcousticElectroA" type="range" min="0" max="1" step="0.05" value="0" /></div>
+          </div>
+        </div>
+
+        <div class="ui segment mixerelement">
+          <div class="ui grid">
+            <div class="four wide column">Camper A1</div>
+            <div class="twelve wide column"><input class="CamperA1" type="range" min="0" max="1" step="0.05" value="0" /></div>
+          </div>
+        </div>
+
+        <div class="ui segment mixerelement">
+          <div class="ui grid">
+            <div class="four wide column">Camper B1</div>
+            <div class="twelve wide column"><input class="CamperB1" type="range" min="0" max="1" step="0.05" value="0" /></div>
+          </div>
+        </div>
+
+        <div class="ui segment mixerelement">
+          <div class="ui grid">
+            <div class="four wide column">In the morning 1</div>
+            <div class="twelve wide column"><input class="Inthemorning1" type="range" min="0" max="1" step="0.05" value="0" /></div>
+          </div>
+        </div>
+
+        <div class="ui segment mixerelement">
+          <div class="ui grid">
+            <div class="four wide column">Violin 1</div>
+            <div class="twelve wide column"><input class="Violin1" type="range" min="0" max="1" step="0.05" value="0" /></div>
+          </div>
+        </div>
+       </div>
+      </div>
+    </body>
+</html>

@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<!--
+Copyright 2017 by SAE Institute Zurich
+-->
+<html>
+    <head>
+        <title>Exercise 8</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" type="text/css" href="core/lib/semantic-ui/semantic.min.css">
+        <link rel="stylesheet" type="text/css" href="core/lib/videojs/video-js.css">
+        
+        <style>
+            .videoplayer {
+                width: 100%;
+                height: auto;
+            }   
+            
+            .vjs-text-track-display div {  }
+        </style>
+        
+        <script src="core/lib/jquery-3.2.1.js"></script>
+        <script src="core/lib/semantic-ui/semantic.min.js"></script>
+        <script src="core/lib/videojs/video.js"></script>  <!-- VIDEO JS LIBRARY Script Tag -->
+        <script src="core/js/plugins/videojs.zoomrotate.js"></script>
+        
+        
+        <script>
+          videojs.options.flash.swf = "core/lib/videojs/video-js.swf";
+          
+          let actRotation = 0;
+          let actZoom = 1;
+          
+          function init() {
+
+            // PlugIn braucht komischerweise beide Werte. Für die Funktion jeweils ist ja eigentlich nur eine Angabe relevant
+            
+            $('button.rotatepos').on("click", function() {
+              actRotation += 10;
+              updateZoomRotate();
+			
+			});
+            $('button.rotatemin').on("click", function() {
+              actRotation -= 10;
+              updateZoomRotate();
+			
+			});
+
+            $('button.zoomin').on("click", function() {
+              actZoom += 0.1;
+              updateZoomRotate();
+			
+			});
+            $('button.zoomout').on("click", function() {
+              actZoom -= 0.1;
+              updateZoomRotate();
+              
+			
+			});
+          }
+          
+          // Vereinfachung
+          function rotateVideo(value) {
+            
+          }
+          
+          function zoomVideo(value) {
+            
+          }
+          // METHODE - updateZoomRotate Inhalt als Platzhalter für Zeile 40 bis 56
+          function updateZoomRotate() {
+            videojs.players.videoControl.zoomrotate({rotate: actRotation, zoom: actZoom});
+            
+          }
+          
+          $(function() {
+              init();
+          });
+        </script>
+        
+    </head>
+    <body>
+      <div class="ui raised padded container segment">
+        <div class="ui segments">
+        <div class="ui segment">
+          <h3>Video & Audio for Web (Basics) - Exercise 8</h3>
+        </div>
+        <div class="ui segment">
+          <video id="videoControl" class="videoplayer video-js vjs-default-skin vjs-big-play-centered vjs-16-9" controls="controls" 
+                 poster="core/media/img/video_still.jpg" width="640" height="360" data-setup='{"plugins": { "zoomrotate": { "rotate": "0", "zoom": "1" } } }'>  <!-- Rotation plus Zoom Plug-In: {"plugins": { "zoomrotate": { "rotate": "0", "zoom": "1" } } } -->
+            <source src="core/media/video/sae_spot.mp4" type="video/mp4">
+            <source src="core/media/video/sae_spot.ogv" type="video/ogg">
+            <source src="core/media/video/sae_spot.webm" type="video/webm">
+            <track kind="subtitles" label="English" src="core/media/vtt/subtitles_en.vtt" srclang="en" default="default"></track>
+            <track kind="subtitles" label="Deutsch" src="core/media/vtt/subtitles_de.vtt" srclang="de"></track>
+          </video>
+        </div>
+        <div class="ui segment">
+          <button class="ui button rotatepos">
+              Rotate +   
+          </button>
+          <button class="ui button rotatemin">
+              Rotate -  
+          </button> &nbsp;&nbsp;&nbsp;
+          <button class="ui button zoomin">
+              Zoom +   
+          </button>
+          <button class="ui button zoomout">
+              Zoom -  
+          </button>
+        </div>
+       </div>
+      </div>
+    </body>
+</html>

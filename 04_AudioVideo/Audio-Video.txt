@@ -1,0 +1,67 @@
+Wie integriere ich Video und Audio ins WEB?
+
+HTML5 Video Tag (Code Googeln)
+- MP4 Format kann mittlerweile eigentlich überall abgespielt werden, empfehlenswert
+
+Was ist ein Video-Codec?
+- Encoder / Decoder, wie z.B ZIP File, um eine Kompression vorzunehmen und zu verpacken. Mit so einem Algorythmus sind die einzelnen Pixel smootly abspielbar. Man komprimiert das Video als MP4 z.b.
+- Versucht Datenmenge zu verkleinern, d.h Dateigrösse und die Datenmengen sollen gut abspielbar sein (25fps sind 90k fph)-
+- Codec schaut Bild für Bild an, was ist anders, was ist gleich? Codec können wie JPEG verlustbehaftet sein:
+- (JPEG speichert nur jedes 4te Pixel ab, der Rest wird gerechnet. BITRATE ist der Verlustbehaftete Schnitt, z.B 3MBPS Bitrate = Wie gross wird das File zu errechnen?)
+- Es gibt Parameter wie Zielbitrate, Maximalbidrate (z.B. Games haben meistens 60FPS als Framerate mit direkter INTERAKTION und Interaktionen wie Bewegungsunschärfe)
+
+Auflösung VS Bildrate:
+- SD z.B 1MBPS, Full HD
+- Videos haben konstante Framerates, 25FPS reichen da komplett aus und sind stabil. (D.h können nicht einbrechen wie Games)
+
+Warum wieviel FPS?
+- Europäissches Stromnetz 50hz, 50hz pro sekunde an UND ab = Wechselstrom (LED heute ist Gleichstrom) ergibt 25fps. Die Amis sind auf 60hz, somit 30fps.
+- (Slowmotion bei Autoscheinwerfern) flackern.
+
+
+Was bedeutet die Dateiendung?
+- MOV, MP4, WEBM etc können nur dann abgespielt werden, wenn die passenden CODECs standardmässig (lizenzrechttechnisch) auf dem Rechner installiert sind. (Gibt auch PlugIns, um diese im Nachhinein runterzuladen)
+
+Web Codecs:
+- Im Web ist MP4 recht üblich, auch wegen der Browserunterstützung
+- HTML5 hat FlashPLayer überflüssig gemacht, OpenWeb = User muss nicht mehr zu einer Installation gezwungen werden.
+- Vor HTML5 war Flashplayer das Medium, um Videoinhalte anzeigen zu lassen.
+
+
+Adobe Media Encoder CC:
+- Exportumwandler von Adobe¨
+1) Drag and Drop des MP4 Videos (z.B) in den überwachten Ordner. Auf den Link des Videos klicken
+2) Format: H264 (Vorteilhaft) / Preset: Custom (Oder Youtube 1080 etc) oder auch bei der Framerate 15 zu 30 max
+3) Können auch mehrere Drag and Drop einegfügt werden, anschliessend alle anwählen, vorgabe Link anklicken und bearbeiten a la Schritt 2 - Mit dem grünen Play Button wird dann eines nach dem anderen konvertiert.
+
+
+HTML5 Video Tag Attribute:
+- Autoplay, Controls, Width, Height...Etc
+
+Audio / Video DOM Reference (In W3C):
+- Methods() in JS
+
+WEBRTC:
+- Real Time Daten im Browser darstellen im Zusammenhang von Video und Audio
+- Ein Kunde kann ein Foto von sich machen direkt in der Applikation, quasi Livebild Screenshotten und übertragen. 
+- Dazu gehört auch die Audiosteuerung
+- Unbedingt gehören Anforderungen eingebaut, die man zulassen kann. D.h GPS, Kameradaten etc muss der User zustimmen
+
+IFRAME:
+- Plus: YT auf der Website, da Google und Youtueb gekoppelt sind. Für SEO gekoppelt. // Verschiedene Qualitäten können angeboten werden. <imframe></iframe>
+- Minus: Man muss mit den Channels arbeiten
+- Dies ist der Link um YT-Videos zu integrieren. Am besten ein Container s.47-49 auf der Folie
+
+
+VIDEO JS:
+- Grafische Oberfläche des Players die man anpassen kann, kostenlose Library, grafische Anpassungen zu Untertiteln und mehr
+- HTML5 Video und Flash Fallbacks falls nötig
+
+
+HTML5 Audio Tag Codes:
+- MP3 ist der bekannteste WEB-Audio Codec
+- Tag Aufbau etwa glecih wie beim Video
+
+
+HOWLER.JS LIBRARY
+- Selbiges Prinzip wie VideoJS, aber für AUDIO
