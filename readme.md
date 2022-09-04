@@ -5,7 +5,7 @@
 
 # ALL ABOUT CANVAS and CANVAS GAMES - ✔
 
-<img align="center" alt="JavaScript"   src="https://i.imgur.com/YpEmDFi.jpg" /> <br>
+<img align="center" alt="Canvas Picture" src="https://i.imgur.com/YpEmDFi.jpg" /> <br>
 
 This "All about CANVAS and CANVAS GAMES"-repository catches up its focus on all the projects I was working on while using on a canvas system through the years as a **SAE-Web Development** student with exercise lessons every week as well as tutorial videos on _Youtube_.
 Direct Link to the place where I'm studying are you going to find [HERE](https://www.sae.edu/che/de?utm_source=PS01&gclid=Cj0KCQjw-4SLBhCVARIsACrhWLVIaD_aUt7y4brT7tqMW9o7tskgb1vjQqJFkzQwkwdN_40_Ls7MgAEaAtXxEALw_wcB)
