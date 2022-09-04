@@ -16,7 +16,7 @@ Direct Link to the place where I'm studying are you going to find [HERE](https:/
 
 
 ***
-## Folder Directory
+## Folder Directory✅
 ***
 
 | Topic | Content  | 
@@ -71,7 +71,7 @@ _**CANVAS:**_
 - do have attributes like: Alpha True (Transparent background), Fill (fill area), Stroke (outlines): Draw images, texts, paths, etc...
 - are integrated in Google Maps where it can be used to reload map material each time you zoom (interactivity).
 - image rendering is alyways fixed on the (0/0)-starting point in the upper left corner.
-- Fact: ``CANVAS`` := ``WEBGL``
+- or better known as ``<canvas>`` element is also used by the Canvas API to do 2D graphics on web pages. WebGL does so by introducing an API that closely conforms to OpenGL ES 2.0 that can be used over there.
 
 
 _**ANTI-ALIASING:**_
