@@ -5,12 +5,12 @@
 
 # ALL ABOUT CANVAS and CANVAS GAMES - ✔
 
+<img align="center" alt="JavaScript"   src="https://i.imgur.com/YpEmDFi.jpg" /> <br>
+
 This "All about CANVAS and CANVAS GAMES"-repository catches up its focus on all the projects I was working on while using on a canvas system through the years as a **SAE-Web Development** student with exercise lessons every week as well as tutorial videos on _Youtube_.
-        
 Direct Link to the place where I'm studying are you going to find [HERE](https://www.sae.edu/che/de?utm_source=PS01&gclid=Cj0KCQjw-4SLBhCVARIsACrhWLVIaD_aUt7y4brT7tqMW9o7tskgb1vjQqJFkzQwkwdN_40_Ls7MgAEaAtXxEALw_wcB)
 
-
-⚫🔴🟡 IMPORTANT: Comments in each file are commented in german⚫🔴🟡
+{💥} => [HERE](https://code.tutsplus.com/articles/21-ridiculously-impressive-html5-canvas-experiments--net-14210) are 25 CRAZY CANVAS EXPERIMENTS to demonstrate of what canvas can actually do (also for your next project)
 <br />
 <br />
 
@@ -25,8 +25,9 @@ Direct Link to the place where I'm studying are you going to find [HERE](https:/
 | 02_CanvasMoneyGame|  Canvas Game based on a "Dagobert Duck" game |
 | 03_SnakeGame |  Canvas Game based on Snake  |
 | 04_AudioVideo |  01_VideoTag / 02_PlayPauseVideo / 03_Webcam / 04_VideoJS / 05_AudioTag / 06_AudioMixer / 07_HowlerJS  |
+| InfoCanvas |  Canvas Cheat Sheet Version 1 / Version 2  |
 
-
+⚫🔴🟡 IMPORTANT: Comments in each file are commented in german⚫🔴🟡
 <br />
 <br />
 
@@ -34,7 +35,7 @@ Direct Link to the place where I'm studying are you going to find [HERE](https:/
 ## Technologies and Installation (Stored at core > lib-folder) ✅
 ***
 
-(TO SIMPLYFY) - JQUERY - INSTALLATION:
+(TO SIMPLIFY) - JQUERY - INSTALLATION:
 * https://cdnjs.com/libraries/jquery (if you would like to use JQUERY in your project)
 <br />
 
@@ -61,59 +62,23 @@ Direct Link to the place where I'm studying are you going to find [HERE](https:/
 
 ## &nbsp;CANVAS - Useful Assistance ✅
 ***
-``AJAX`` = Asynchronous* Javascript and XML 
 
-_**Means:**_
+_**CANVAS:**_
 
-* Asynchronous Request (Fetch = Vanilla, JQuery Ajax = JQuery, etc) and Responses.
-XML = Obsolete, actually works like HTML. Through Json (text version of JS)
+* is a "Leinwand" on which you can draw / display objects and surfaces. [Here](https://code.tutsplus.com/articles/21-ridiculously-impressive-html5-canvas-experiments--net-14210) are some additional examples.
+- is pixel-based, unlike the other HTML5 elements, consisting of Width and Height. We have control over every single pixel.
+- elements do have 2D-Context: (X- / Y- axis based while "WEBGL" has 3Dimensional points.
+- do have attributes like: Alpha True (Transparent background), Fill (fill area), Stroke (outlines): Draw images, texts, paths, etc...
+- are integrated in Google Maps where it can be used to reload map material each time you zoom (interactivity).
+- image rendering is alyways fixed on the (0/0)-starting point in the upper left corner.
+- Fact: ``CANVAS`` := ``WEBGL``
 
 
+_**ANTI-ALIASING:**_
 
-_**How does it look like to ASYNC a function, FETCH an API and read the content with JSON() IN YOUR BROWSER'S CONSOLE ?**_
-
-```js
-/* ---- BASIC EXAMPLE ---- */
-
-```
-<br>
-
-_**How does it look like to ASYNC a function, FETCH an API and read the content with JSON() IN YOUR WEBSITE ?**_
-
-```js
-
-```
-
+* Calculates clean transitions, straight lines. Semi-transparency must be calculated everywhere to achieve sharp transitions on a pixel basis.
 <br />
 <br />
-
-
-
-## &nbsp;TERMINAL COMMANDS I USED HERE ✅
-***
-
-| COMMAND | EFFECT  | 
-|:--------------| :--------------|
-| $ node --version | Checks the node.js version (None if you havent installed it) |
-| $ npm --version | Checks the NPM Version (Node Package Manager) |
-| $ npm init | !OPTIONAL AT THE BEGINNING: Setting up the nodemodule with additional information |
-| $ pwd | Print Work Directory (checks your path) |
-| $ ls | Show Contents of a Directory |
-| $ cd TAB (TAB as Autocomplete) | Navigate forward through Content Directory |
-| $ cd .. | Navigate backwards of the Content Directory |
-| $ node (...) | Using NODE to start the serverside workingspace |
-| $ nodemon (...)  | Using NODEMON to start the serverside workingspace |
-| $ npm install -g nodemon  | Install Nodemon (This is the version to Install it once globally) |
-| $ npm i express  | Install Express (You can also write "install", "i" is shortcut) |
-| $ npm i ejs  | Install EJS (You can also write "install", "i" is shortcut) |
-| $ npm i ndeb  | Install NEDB, a lightweight Javascript Database |
-| $ npm i node-fetch@2  | Install Node-Fetch Vers.2, a lightweight module that brings Fetch API to Node.js. |
-| $ npm i request  | (Deprecated!) Fetch is CLIENT-SIDE, to load APIs on server-side we need packages like this => AXIOS :) |
-
-
-<br />
-<br />
-
 
 ***
 ## Collaboration ✅
