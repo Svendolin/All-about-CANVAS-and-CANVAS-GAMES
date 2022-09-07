@@ -13,7 +13,7 @@ var sound = new Howl ({
 sound.on('load',function() {
   var startButton = document.getElementById('start');
   startButton.addEventListener('click', e => {
-    this.classList.toggle('aktiv');
+    // this.classList.toggle('aktiv');
   
     if(sound.playing()) {
       sound.pause();
